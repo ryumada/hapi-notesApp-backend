@@ -44,6 +44,45 @@ const addNoteHandler = (request, h) => {
   return response;
 };
 
+// untuk menyunting note by id
+const editNoteByIdHandler = (request, h) => {
+  // ambil id note
+  const { id } = request.params;
+  // ambil note yang telah diedit
+  const { title, tags, body } = request.payload;
+  const updatedAt = new Date().toISOString(); // perbarui tanggal updated
+
+  const index = notes.findIndex((note) => note.id === id);
+  /** Bila note dengan id yang dicari ditemukan,
+   * maka index akan bernilai array index dari objek catatan yang dicari.
+   * Namun bila tidak ditemukan, maka index bernilai - 1.
+   */
+  if (index !== -1) {
+    notes[index] = {
+      ...notes[index],
+      title,
+      tags,
+      body,
+      updatedAt,
+    };
+
+    // buat nilai response berhasil
+    const response = h.response({
+      status: 'success',
+      message: 'Catatan berhasil diperbarui',
+    });
+    response.code(200);
+    return response;
+  }
+
+  const response = h.response({
+    status: 'fail',
+    message: 'Gagal memperbarui catatan. Id tidak ditemukan?!',
+  });
+  response.code(404);
+  return response;
+};
+
 // untuk menampilkan notes
 const getAllNotesHandler = () => ({
   status: 'success',
@@ -55,7 +94,6 @@ const getAllNotesHandler = () => ({
 // untuk mengambil satu notes
 const getNoteByIdHandler = (request, h) => {
   const { id } = request.params;
-  
   // cari notenya dengan array filter
   const note = notes.filter((n) => n.id === id)[0];
 
@@ -78,4 +116,6 @@ const getNoteByIdHandler = (request, h) => {
 };
 
 // export module agar dapat dipakai ke berkas .js lain
-module.exports = { addNoteHandler, getAllNotesHandler, getNoteByIdHandler };
+module.exports = {
+  addNoteHandler, editNoteByIdHandler, getAllNotesHandler, getNoteByIdHandler,
+};

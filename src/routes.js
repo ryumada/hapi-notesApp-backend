@@ -1,4 +1,6 @@
-const { addNoteHandler, getAllNotesHandler, getNoteByIdHandler } = require('./handler');
+const {
+  addNoteHandler, editNoteByIdHandler, getAllNotesHandler, getNoteByIdHandler,
+} = require('./handler');
 
 const routes = [
   // untuk menambahkan notes baru
@@ -18,6 +20,12 @@ const routes = [
     method: 'GET',
     path: '/notes/{id}',
     handler: getNoteByIdHandler,
+  },
+  // untuk menyunting note
+  {
+    method: 'PUT',
+    path: '/notes/{id}',
+    handler: editNoteByIdHandler,
   },
 ];
 
