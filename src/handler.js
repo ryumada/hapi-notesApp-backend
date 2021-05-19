@@ -44,5 +44,38 @@ const addNoteHandler = (request, h) => {
   return response;
 };
 
+// untuk menampilkan notes
+const getAllNotesHandler = () => ({
+  status: 'success',
+  data: {
+    notes,
+  },
+});
+
+// untuk mengambil satu notes
+const getNoteByIdHandler = (request, h) => {
+  const { id } = request.params;
+  
+  // cari notenya dengan array filter
+  const note = notes.filter((n) => n.id === id)[0];
+
+  // kembalikan nilai dengan ngecek apa note ada atau tidak
+  if (note !== undefined) {
+    return {
+      status: 'success',
+      data: {
+        note,
+      },
+    };
+  }
+  // kembalikan pesan error apabila tidak ada note yang ditemukan
+  const response = h.response({
+    status: 'fail',
+    message: 'Catatan tidak ditemukan',
+  });
+  response.code(404);
+  return response;
+};
+
 // export module agar dapat dipakai ke berkas .js lain
-module.exports = { addNoteHandler };
+module.exports = { addNoteHandler, getAllNotesHandler, getNoteByIdHandler };
