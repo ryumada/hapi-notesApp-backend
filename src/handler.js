@@ -44,6 +44,29 @@ const addNoteHandler = (request, h) => {
   return response;
 };
 
+// untuk menghapus note by id
+const deleteNoteByIdHandler = (request, h) => {
+  const { id } = request.params;
+
+  const index = notes.findIndex((note) => note.id === id);
+  if (index !== -1) {
+    notes.splice(index, 1);
+    const response = h.response({
+      status: 'success',
+      message: 'Catatan berhasil dihapus',
+    });
+    response.code(200);
+    return response;
+  }
+
+  const response = h.response({
+    status: 'fail',
+    message: 'Catatan gagal dihapus. Id tidak ditemukan?!',
+  });
+  response.code(404);
+  return response;
+};
+
 // untuk menyunting note by id
 const editNoteByIdHandler = (request, h) => {
   // ambil id note
@@ -117,5 +140,9 @@ const getNoteByIdHandler = (request, h) => {
 
 // export module agar dapat dipakai ke berkas .js lain
 module.exports = {
-  addNoteHandler, editNoteByIdHandler, getAllNotesHandler, getNoteByIdHandler,
+  addNoteHandler,
+  deleteNoteByIdHandler,
+  editNoteByIdHandler,
+  getAllNotesHandler,
+  getNoteByIdHandler,
 };
